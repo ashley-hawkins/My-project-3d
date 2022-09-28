@@ -7,13 +7,10 @@ public class CameraBehaviour : MonoBehaviour
     // Start is called before the first frame update
     public Transform Follow;
     public float maxDist = 10.0f;
+    public float clipAdjustDist;
     Vector3 angle;
-    BoxCollider myCollider;
-    Rigidbody rb;
     void Start()
     {
-        myCollider = GetComponent<BoxCollider>();
-        rb = GetComponent<Rigidbody>();
         angle = new();
     }
 
@@ -37,6 +34,7 @@ public class CameraBehaviour : MonoBehaviour
         RaycastHit hit;
 
         float finalDistance;
+        Vector3 clipAdjustment = Vector3.zero;
         if (!Physics.Raycast(ray, out hit) || hit.distance > maxDist)
         {
             finalDistance = maxDist;
@@ -44,8 +42,10 @@ public class CameraBehaviour : MonoBehaviour
         else
         {
             finalDistance = hit.distance;
+            clipAdjustment = hit.normal * clipAdjustDist;
         }
 
-        rb.Move((rotation * Vector3.back * finalDistance) + Follow.position, rotation);
+        transform.position = (rotation * Vector3.back * finalDistance) + Follow.position + clipAdjustment;
+        transform.rotation = rotation;
     }
 }
