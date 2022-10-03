@@ -7,6 +7,7 @@ public class CameraBehaviour : MonoBehaviour
     // Start is called before the first frame update
     public Transform Follow;
     public float maxDist = 10.0f;
+    public Vector2 offset = new(0.5f, 0.0f);
     public float clipAdjustDist;
     Vector3 angle;
     void Start()
@@ -29,8 +30,10 @@ public class CameraBehaviour : MonoBehaviour
 
         Quaternion rotation = Quaternion.Euler(angle);
 
-        Ray ray = new(Follow.position, rotation * Vector3.back * maxDist);
-        Debug.DrawRay(Follow.position, rotation * Vector3.back * maxDist);
+        var centre = Follow.position + rotation * (Vector3.right * offset.x + Vector3.up * offset.y);
+
+        Ray ray = new(centre, rotation * Vector3.back * maxDist);
+        Debug.DrawRay(centre, rotation * Vector3.back * maxDist);
         RaycastHit hit;
 
         float finalDistance;
@@ -45,7 +48,7 @@ public class CameraBehaviour : MonoBehaviour
             clipAdjustment = hit.normal * clipAdjustDist;
         }
 
-        transform.position = (rotation * Vector3.back * finalDistance) + Follow.position + clipAdjustment;
+        transform.position = (rotation * Vector3.back * finalDistance) + centre + clipAdjustment;
         transform.rotation = rotation;
     }
 }
