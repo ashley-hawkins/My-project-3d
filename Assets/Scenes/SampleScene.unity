@@ -523,9 +523,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ff8529ab0192344b936f3a25d4fb500, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Follow: {fileID: 1489507408}
+  follow: {fileID: 1489507408}
   maxDist: 10
-  clipAdjustDist: 0.12
+  cameraBoundingBoxExtent: 0.3
 --- !u!1 &1489507405
 GameObject:
   m_ObjectHideFlags: 0
