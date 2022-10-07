@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerBehaviour : MonoBehaviour
 {
@@ -69,6 +70,7 @@ public class PlayerBehaviour : MonoBehaviour
             Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
 
             RaycastHit hit;
+
             if (Physics.Raycast(ray, out hit))
             {
                 print("Name of object hit: " + hit.collider.gameObject.name);
