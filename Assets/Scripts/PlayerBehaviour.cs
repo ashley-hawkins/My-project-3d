@@ -29,6 +29,7 @@ public class PlayerBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        GetComponent<Shared>().DoRayCollisionCheck();
         ProcessMovement();
     }
     void ProcessMovement()
@@ -47,6 +48,10 @@ public class PlayerBehaviour : MonoBehaviour
                         var playerVelVector = playerDirection * Vector3.forward * speed;
                         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, eulerAngles.y, transform.rotation.eulerAngles.z);
                         cc.SimpleMove(playerVelVector);
+                    }
+                    else if (Input.GetKeyDown(KeyCode.Space) && GetComponent<Shared>().DoRayCollisionCheck())
+                    {
+                        cc.Move(Vector3.up);
                     }
                     else
                     {

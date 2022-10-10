@@ -7,6 +7,8 @@ public class EnemyBehaviour : MonoBehaviour
     public GameObject player;
     public GameObject bulletOrigin;
 
+    Vector3 moveDirection = Vector3.forward;
+
     CharacterController cc;
     // Start is called before the first frame update
     void Start()
@@ -22,6 +24,11 @@ public class EnemyBehaviour : MonoBehaviour
         euler.y = Quaternion.LookRotation(difference).eulerAngles.y;
         transform.rotation = Quaternion.Euler(euler);
 
-        cc.SimpleMove(Vector3.zero);
+        if (!GetComponent<Shared>().DoRayCollisionCheck())
+        {
+            moveDirection = -moveDirection;
+        }
+
+        cc.SimpleMove(moveDirection * 5.0f);
     }
 }

@@ -67,13 +67,13 @@ public class CameraBehaviour : MonoBehaviour
         }
         Renderer[] materialComponents = follow.GetComponentsInChildren<Renderer>();
 
-        foreach (Renderer x in materialComponents)
-        {
-            print(x.material.name);
-            var c = x.material.color;
-            c.a = opacity;
-            x.material.color = c;
-        }
+        //foreach (Renderer x in materialComponents)
+        //{
+        //    print(x.material.name);
+        //    var c = x.material.color;
+        //    c.a = opacity;
+        //    x.material.color = c;
+        //}
 
         transform.position = (rotation * Vector3.back * finalDistance) + centre;
         transform.rotation = rotation;
