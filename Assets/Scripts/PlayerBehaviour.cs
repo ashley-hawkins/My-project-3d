@@ -13,14 +13,23 @@ public class PlayerBehaviour : MonoBehaviour
     Movement movement;
     CharacterController cc;
     Camera cam;
-    // Speed in metres per second.
-    public float speed = 5.0f;
+    // Max speed in metres per second.
+    public float speed = 10.0f;
+    // acceleration in metres per second per second
+    public float accel = 10.0f;
+
     public float maxTurnSpeed = 20.0f;
+
+    // gravity measured in multiples of g
+    public float gravity = 1.0f;
+
+    public Vector3 vel;
 
     GrapplerBehaviour grappler;
     // Start is called before the first frame update
     void Start()
     {
+        vel = Vector3.zero;
         grappler = GetComponent<GrapplerBehaviour>();
         cc = GetComponent<CharacterController>();
         cam = Camera.main;
@@ -34,29 +43,45 @@ public class PlayerBehaviour : MonoBehaviour
     }
     void ProcessMovement()
     {
+        Quaternion camRotation = cam.transform.rotation;
+        Vector3 camEuler = camRotation.eulerAngles;
+
+        var playerDirection = Quaternion.Euler(new Vector3(0, camEuler.y, 0));
+
         switch (movement)
         {
             case Movement.Walk:
                 {
+                    Vector3 accelAngle = Vector3.zero;
+                    vel.y -= 9.8f * gravity * Time.deltaTime;
+
                     if (Input.GetKey(KeyCode.W))
                     {
-                        Quaternion camRotation = cam.transform.rotation;
-                        Vector3 eulerAngles = camRotation.eulerAngles;
-
-                        var playerDirection = Quaternion.Euler(new Vector3(0, eulerAngles.y, 0));
-
-                        var playerVelVector = playerDirection * Vector3.forward * speed;
-                        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, eulerAngles.y, transform.rotation.eulerAngles.z);
-                        cc.SimpleMove(playerVelVector);
+                        accelAngle += Vector3.forward;
+                    }
+                    else if (Input.GetKey(KeyCode.A))
+                    {
+                        accelAngle += Vector3.left;
+                    }
+                    else if (Input.GetKey(KeyCode.D))
+                    {
+                        accelAngle += Vector3.right;
+                    }
+                    else if (Input.GetKey(KeyCode.S))
+                    {
+                        accelAngle += Vector3.back;
                     }
                     else if (Input.GetKeyDown(KeyCode.Space) && GetComponent<Shared>().DoRayCollisionCheck())
                     {
-                        cc.Move(Vector3.up);
+
                     }
-                    else
+
+                    if (accelAngle.magnitude > 0)
                     {
-                        cc.SimpleMove(Vector3.zero);
+                        Quaternion accelAngleQuaternion = Quaternion.LookRotation(accelAngle);
+                        transform.rotation = accelAngleQuaternion * Quaternion.Euler(transform.rotation.eulerAngles.x, camEuler.y, transform.rotation.eulerAngles.z);
                     }
+
                     break;
                 }
             case Movement.Grapple:
@@ -66,6 +91,7 @@ public class PlayerBehaviour : MonoBehaviour
                         movement = Movement.Walk;
                         grappler.EndGrapple();
                     }
+
                     break;
                 }
         }

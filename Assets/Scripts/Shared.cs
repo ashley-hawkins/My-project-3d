@@ -5,25 +5,25 @@ using UnityEngine;
 public class Shared : MonoBehaviour
 {
     // Start is called before the first frame update
-    Collider cd;
+    Collider col;
     [Range(0.0f, 1.0f)]
     public float extension = 0.2f;
     void Start()
     {
-        cd = GetComponent<Collider>();
+        col = GetComponent<Collider>();
     }
 
     public bool DoRayCollisionCheck()
     {
-        float rayLength = cd.bounds.extents.y + extension;
+        float rayLength = col.bounds.extents.y + extension;
 
         Vector3[] positions =
         {
-            cd.bounds.center,
-            cd.bounds.center + new Vector3(cd.bounds.extents.x, 0.0f, 0.0f),
-            cd.bounds.center - new Vector3(cd.bounds.extents.x, 0.0f, 0.0f),
-            cd.bounds.center + new Vector3(0.0f, 0.0f, cd.bounds.extents.z),
-            cd.bounds.center - new Vector3(0.0f, 0.0f, cd.bounds.extents.z)
+            col.bounds.center,
+            col.bounds.center + new Vector3(col.bounds.extents.x, 0.0f, 0.0f),
+            col.bounds.center - new Vector3(col.bounds.extents.x, 0.0f, 0.0f),
+            col.bounds.center + new Vector3(0.0f, 0.0f, col.bounds.extents.z),
+            col.bounds.center - new Vector3(0.0f, 0.0f, col.bounds.extents.z)
         };
 
         RaycastHit hit;
@@ -40,7 +40,7 @@ public class Shared : MonoBehaviour
             {
                 result = false;
             }
-            Debug.DrawRay(pos, Vector3.down * rayLength, hitColor, 5.0f);
+            Debug.DrawRay(pos, Vector3.down * rayLength, hitColor);
         }
 
         print("Checking for collision");
